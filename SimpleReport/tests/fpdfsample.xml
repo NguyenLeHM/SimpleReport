@@ -1,0 +1,56 @@
+<simplereport>
+	<setting>
+		<pagesetup name='A4' margin='50,50,50,50,25' bothside='1' />
+		<addfont>
+			<font1 family='DejaVu,B,c:/dung/ttf/DejaVuSansCondensed-Bold.ttf,uni=True' />
+			<font2 family='DejaVu,I,c:/dung/ttf/DejaVuSansCondensed-Oblique.ttf,uni=True' />
+			<font3 family='DejaVu,BI,c:/dung/ttf/DejaVuSansCondensed-BoldOblique.ttf,uni=True' />
+			<font4 family='DejaVu,,c:/dung/ttf/DejaVuSansCondensed.ttf,uni=True' />
+			<font5 family='Times,,c:/windows/fonts/Times.ttf,uni=True' />
+			<font6 family='Times,B,c:/windows/fonts/Timesbd.ttf,uni=True' />
+			<font7 family='Times,BI,c:/windows/fonts/Timesbi.ttf,uni=True' />
+			<font8 family='Times,I,c:/windows/fonts/Timesi.ttf,uni=True' />
+		</addfont>
+		<defaultfont font='DejaVu' style='' size='0' /> 
+	</setting>
+	<parameters list='UserCode,UserName,FrDate,ToDate' />	
+	<data>
+		<table>
+			<invoices class='sqlite3' band='detail' command='GetRows("Invoices","*","InvType=[Out] and InvDate>=[+FrDate+] and InvDate<=[+ToDate+]")' />
+		</table>
+		<variable>
+			<stt init='0' expression='stt+1' reset='report' />
+			<total init='0' expression='InvTotal' calculate='SUM' reset='report' />
+		</variable>
+	</data>
+	<report>
+		<title height='45'>
+			<label1 class='Label' align='Center' text='Cộng hòa xã hoi chu nghia Viet nam' linebreak='1'/>
+			<label2 class='Label' align='Center' text='Doc lap - Tu do - Hanh phuc' linebreak='1' />				
+			<label3 class='Label' align='Center' font='Times,B,16' text='Bang ke thue dau ra' linebreak='1' />
+		</title>
+		<header height='25'>
+			<label4 class='Label' text='Ma cong ty' border='1' width='100' />
+			<label5 class='Label' text='Ten cong ty' border='1' width='200' />
+			<label6 class='Label' text='Tong tien' border='1' width='100' linebreak='1' />
+		</header>
+		<content>
+			<groupheader1 class='Group' expression='InvCustomer' height='25' reprintnewpage='1'>
+				<grpcustomer class='Field' border='1' font='Times,BI,12' height='20' width='300' expression='"Tổng khách hàng "+InvCustomer' stretch='1' />
+				<grptotal class='Field' border='1' init='0' font='Times,BI,12' height='20' width='100' expression='SumFor(InvTotal,InvCustomer)' align='Right' linebreak='1' />
+			</groupheader1>
+			<detail height='25' class='Detail'>
+				<dtlnvno class='Field' border='LR' height='20' width='100' expression='InvNo' />
+				<dtlcustommer class='Field' border='LR' height='20' width='200' expression='InvCustomer' />
+				<dtltotal class='Field' border='LR' height='20' width='100' expression='InvTotal' align='Right' linebreak='1' />
+			</detail>	
+			<groupfooter1 height='25'>
+				<grpbottotal class='Field' init='0' border=1 font='Times,BI,12' height='20' width='400' expression='InvTotal' calculate='SUM' align='Right' linebreak='1' reset='groupheader1' s/>
+			</groupfooter1>
+		</content>
+		<footer height='25'>
+			<txtuser class='Field' border='1' height='20' width='300' expression='UserCode+" "+UserName' />
+			<txttotal class='Field' border='1' height='20' width='100'  expression='total' align='Right' linebreak='1' />
+		</footer>
+	</report>
+</simplereport>
